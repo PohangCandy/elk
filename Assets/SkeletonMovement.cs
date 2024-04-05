@@ -40,7 +40,8 @@ public class SkeletonMovement : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.H))
+        playerpos = player.GetComponent<PlayerMovement>().GetPlayerPos();
+        if (Input.GetKey(KeyCode.H))
         {
             heal(20);
         }
@@ -58,7 +59,12 @@ public class SkeletonMovement : MonoBehaviour
         switch (curState)
         {
             case SkeletonState.Stroll:
-
+                if (Vector3.Distance(gameObject.transform.position, playerpos) < 10)
+                {
+                    UpdateState(SkeletonState.MoveTowardsPlayer);
+                    break;
+                }
+                Debug.Log(Vector3.Distance(gameObject.transform.position, playerpos));
                 if (!DoRearchGoal)
                 {
                     Move(gameObject.transform.position, destinationPos);
@@ -69,16 +75,17 @@ public class SkeletonMovement : MonoBehaviour
                 }
                 break;
             case SkeletonState.MoveTowardsPlayer:
-                Move(gameObject.transform.position, player.GetComponent<PlayerMovement>().GetPlayerPos());
-                prevState = SkeletonState.MoveTowardsPlayer;
                 if (Vector3.Distance(gameObject.transform.position, playerpos) < 5)
                 {
                     UpdateState(SkeletonState.Attack);
+                    break;
                 }
                 if (Vector3.Distance(gameObject.transform.position, playerpos) >= 15)
                 {
                     UpdateState(SkeletonState.Stroll);
+                    break;
                 }
+                Move(gameObject.transform.position, playerpos);
                 break;
             case SkeletonState.Attack:
                 Attack(player);
@@ -148,7 +155,7 @@ public class SkeletonMovement : MonoBehaviour
 
     private void Move(Vector3 curPos, Vector3 TowardPos)
     {
-        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, destinationPos, Time.deltaTime * speed);
+        gameObject.transform.position = Vector3.MoveTowards(curPos, TowardPos, Time.deltaTime * speed);
         CheckReachGoal();
     }
 
