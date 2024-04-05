@@ -10,6 +10,8 @@ public class SkeletonMovement : MonoBehaviour
     private Vector3 destinationPos;
     [SerializeField]
     private int speed;
+    [SerializeField]
+    private float distance;
     private bool DoRearchGoal;
     private bool DoDiscoverPlayer;
     public GameObject player;
@@ -23,7 +25,6 @@ public class SkeletonMovement : MonoBehaviour
     }
     [SerializeField]
     private SkeletonState curState;
-    private SkeletonState prevState;
 
 
 
@@ -41,6 +42,9 @@ public class SkeletonMovement : MonoBehaviour
     private void Update()
     {
         playerpos = player.GetComponent<PlayerMovement>().GetPlayerPos();
+
+        distance = Vector3.Distance(gameObject.transform.position, playerpos);
+
         if (Input.GetKey(KeyCode.H))
         {
             heal(20);
@@ -64,7 +68,6 @@ public class SkeletonMovement : MonoBehaviour
                     UpdateState(SkeletonState.MoveTowardsPlayer);
                     break;
                 }
-                Debug.Log(Vector3.Distance(gameObject.transform.position, playerpos));
                 if (!DoRearchGoal)
                 {
                     Move(gameObject.transform.position, destinationPos);
@@ -89,7 +92,6 @@ public class SkeletonMovement : MonoBehaviour
                 break;
             case SkeletonState.Attack:
                 Attack(player);
-                prevState = SkeletonState.Attack;
                 if (hp<=20)
                 {
                     UpdateState(SkeletonState.Flee);
@@ -100,11 +102,11 @@ public class SkeletonMovement : MonoBehaviour
                 }
                 break;
             case SkeletonState.Flee:
-                Flee();
                 if (hp >= 60)
                 {
-                    UpdateState(SkeletonState.Stroll);
+                    UpdateState(SkeletonState.Attack);
                 }
+                Flee();
                 break;
         }
     }
