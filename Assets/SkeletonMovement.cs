@@ -18,6 +18,7 @@ public class SkeletonMovement : MonoBehaviour
     int damage;
     private Vector3 playerpos;
     int hp;
+    private Animator SkelAnim;
 
     private enum SkeletonState
     {
@@ -30,6 +31,7 @@ public class SkeletonMovement : MonoBehaviour
 
     private void Start()
     {
+        SkelAnim = GetComponent<Animator>();
         hp = 100;
         playerpos = player.GetComponent<PlayerMovement>().GetPlayerPos();
         originPos = new Vector3(10.0f, 0.5f, 0.0f);
@@ -63,6 +65,7 @@ public class SkeletonMovement : MonoBehaviour
         switch (curState)
         {
             case SkeletonState.Stroll:
+                SkelAnim.SetTrigger("Stroll");
                 if (Vector3.Distance(gameObject.transform.position, playerpos) < 10)
                 {
                     UpdateState(SkeletonState.MoveTowardsPlayer);
@@ -78,6 +81,7 @@ public class SkeletonMovement : MonoBehaviour
                 }
                 break;
             case SkeletonState.MoveTowardsPlayer:
+                SkelAnim.SetTrigger("MoveTo");
                 if (Vector3.Distance(gameObject.transform.position, playerpos) < 5)
                 {
                     UpdateState(SkeletonState.Attack);
@@ -91,6 +95,7 @@ public class SkeletonMovement : MonoBehaviour
                 Move(gameObject.transform.position, playerpos);
                 break;
             case SkeletonState.Attack:
+                SkelAnim.SetTrigger("Attack");
                 Attack(player);
                 if (hp<=20)
                 {
@@ -102,6 +107,7 @@ public class SkeletonMovement : MonoBehaviour
                 }
                 break;
             case SkeletonState.Flee:
+                SkelAnim.SetTrigger("Flee");
                 if (hp >= 60)
                 {
                     UpdateState(SkeletonState.Attack);
