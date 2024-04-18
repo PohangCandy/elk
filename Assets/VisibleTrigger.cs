@@ -22,6 +22,10 @@ public class VisibleTrigger : Enemy
         SetBoxSize();
     }
 
+    private void Update()
+    {
+    }
+
     public void SetBoxSize()
     {
         boxCollider.size = new Vector3(visibleRange, visibleRange, visibleRange);
@@ -41,7 +45,7 @@ public class VisibleTrigger : Enemy
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             SetVisibleRange(visibleRange + 10.0f);
             changeColor(Color.yellow); // 추격 시 노란색으로 1회 변화
