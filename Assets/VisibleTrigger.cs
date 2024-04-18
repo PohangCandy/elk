@@ -2,14 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisibleTrigger : Enemy
+public class VisibleTrigger : MonoBehaviour
 {
+    GameObject parentObj;
     BoxCollider boxCollider;
+    Enemy enemy;
 
     float visibleRange;
 
     void Start()
     {
+        parentObj = gameObject.transform.parent.gameObject;
+        if(parentObj != null)
+        {
+            enemy = parentObj.GetComponent<Enemy>();
+        }
+
         boxCollider = GetComponent<BoxCollider>();
 
         if (boxCollider == null)
@@ -24,6 +32,7 @@ public class VisibleTrigger : Enemy
 
     private void Update()
     {
+        //Debug.Log(parentObj);
     }
 
     public void SetBoxSize()
@@ -48,8 +57,7 @@ public class VisibleTrigger : Enemy
         if (other.CompareTag("Player"))
         {
             SetVisibleRange(visibleRange + 10.0f);
-            changeColor(Color.yellow); // 추격 시 노란색으로 1회 변화
-            SetEnemyState(EnemyFSM.MoveTowardsPlayer);
+            enemy.VisibleTriggerEnter();
         }
     }
 
@@ -57,7 +65,7 @@ public class VisibleTrigger : Enemy
     {
         if (other.CompareTag("Player"))
         {
-            SetEnemyState(EnemyFSM.MoveTowardsPlayer);
+            enemy.VisibleTriggerStay();
         }
     }
 
@@ -66,9 +74,7 @@ public class VisibleTrigger : Enemy
         if (other.CompareTag("Player"))
         {
             SetVisibleRange(visibleRange - 10.0f);
-            changeColor(Color.white);
-            SetTargetLocation(getRandomLocation(3f));
-            SetEnemyState(EnemyFSM.Stroll);
+            enemy.VisibleTriggerExit();
         }
     }
 }

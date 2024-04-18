@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackTrigger : MonoBehaviour
+public class ExistTrigger : MonoBehaviour
 {
     GameObject parentObj;
     Enemy enemy;
     BoxCollider boxCollider;
 
-    float attackRange;
+    float existRange;
 
     void Start()
     {
@@ -24,24 +24,24 @@ public class AttackTrigger : MonoBehaviour
             Debug.LogError("Box Collider가 없습니다!");
         }
 
-        attackRange = 10f;
+        existRange = 80f;
 
         SetBoxSize();
     }
 
     public void SetBoxSize()
     {
-        boxCollider.size = new Vector3(attackRange, attackRange, attackRange);
+        boxCollider.size = new Vector3(existRange, existRange, existRange);
     }
 
     public float GetVisibleRange()
     {
-        return attackRange;
+        return existRange;
     }
 
     public void SetVisibleRange(float newvisibleRange)
     {
-        this.attackRange = newvisibleRange;
+        this.existRange = newvisibleRange;
         SetBoxSize();
     }
 
@@ -50,8 +50,7 @@ public class AttackTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SetVisibleRange(attackRange + 2.0f);
-            enemy.AttackTriggerEnter();
+            enemy.ExistTriggerEnter();
         }
     }
 
@@ -59,7 +58,7 @@ public class AttackTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            enemy.AttackTriggerStay();
+            enemy.ExistTriggerStay();
         }
     }
 
@@ -67,7 +66,7 @@ public class AttackTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            enemy.AttackTriggerExit();
+            enemy.ExistTriggerExit();
         }
     }
 }
