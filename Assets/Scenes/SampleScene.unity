@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 149381291}
   - component: {fileID: 149381295}
   - component: {fileID: 149381296}
+  - component: {fileID: 149381297}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -244,7 +245,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cddc726804dba242ad4e90c4755bcae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 0
   speed: 0
+  direction: {x: 0, y: 0, z: 0}
 --- !u!54 &149381296
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,6 +275,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &149381297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149381290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae147d04655f5d84a88abbee144f7cee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!1 &397744282
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,8 +520,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49bd1a9c8a854d2468c115d341ba9bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originPos: {x: 0, y: 0, z: 0}
+  destinationPos: {x: 0, y: 0, z: 0}
   speed: 0
+  DoRearchGoal: 0
+  DoDiscoverPlayer: 0
   player: {fileID: 0}
+  damage: 0
+  playerpos: {x: 0, y: 0, z: 0}
+  hp: 0
+  curState: 0
+  prevState: 0
 --- !u!65 &713259594
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -678,7 +703,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.46, y: 50, z: -2.74}
+  m_LocalPosition: {x: 1.46, y: 36.6, z: -2.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -699,6 +724,7 @@ GameObject:
   - component: {fileID: 1051105187}
   - component: {fileID: 1051105192}
   - component: {fileID: 1051105193}
+  - component: {fileID: 1051105194}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Untagged
@@ -718,9 +744,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be8dea6a6b97046468e5763bc11c6785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originPos: {x: 0, y: 0, z: 0}
+  destinationPos: {x: 0, y: 0, z: 0}
   speed: 5
   distance: 0
+  DoRearchGoal: 0
+  DoDiscoverPlayer: 0
   player: {fileID: 149381290}
+  damage: 0
+  playerpos: {x: 0, y: 0, z: 0}
+  hp: 0
+  SkelAnim: {fileID: 0}
   curState: 0
 --- !u!65 &1051105188
 BoxCollider:
@@ -845,7 +879,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fedfbb2a4f024b5448e4af773f002142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetLocation: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  step: 0
+  rend: {fileID: 0}
   hp: 100
+  state: 0
+--- !u!114 &1051105194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051105186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7761663c0e9184489f9678e545a4f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1501925907
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,6 +963,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0ee59c9e2fd39949a07952d1e45f0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObj: {fileID: 0}
+  enemy: {fileID: 0}
+  boxCollider: {fileID: 0}
+  attackRange: 0
 --- !u!1 &1623495317
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,6 +1117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c48b21d99f8f75458d02d9d22afb2cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObj: {fileID: 0}
+  enemy: {fileID: 0}
+  boxCollider: {fileID: 0}
+  existRange: 0
 --- !u!65 &1726062657
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1234,6 +1293,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 195386d72b7c8db4388a6bf4c7dd8123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentObj: {fileID: 0}
+  boxCollider: {fileID: 0}
+  enemy: {fileID: 0}
+  visibleRange: 0
 --- !u!65 &1975628726
 BoxCollider:
   m_ObjectHideFlags: 0
